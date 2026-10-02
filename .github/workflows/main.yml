@@ -20,6 +20,14 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.4'
+
+      - name: Generate gradlew
+        run: gradle wrapper --gradle-version 8.4
+
       - name: Cache Gradle packages
         uses: actions/cache@v5
         with:
@@ -29,9 +37,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Grant Gradle execute permission
-        run: chmod +x gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease --no-daemon
